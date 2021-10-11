@@ -8,7 +8,7 @@ export interface ILuckysheetProps extends Options {
   width?: number
   height?: number
   type?: string
-  onChange?: (data: any) => void
+  onChange?: (data: any, event: MouseEvent) => void
 }
 
 const pickDataProps = (props: any = {}) => {
@@ -23,8 +23,8 @@ const pickDataProps = (props: any = {}) => {
 export const ReactSignaturePad = ({
   className,
   style,
-  width,
-  height,
+  width = 100,
+  height = 50,
   defaultValue,
   type,
   onChange,
@@ -46,25 +46,19 @@ export const ReactSignaturePad = ({
       sigPad.current.fromDataURL(defaultValue)
     }
     sigPad.current.on()
+    if (onChange) {
+      sigPad.current.onEnd((event) => onChange(sigPad.current.toDataURL(type), event))
+    }
     window.addEventListener('resize', resizeCanvas)
     return () => {
       sigPad.current.off()
       window.removeEventListener('resize', resizeCanvas)
     }
-  }, [props, resizeCanvas])
+  }, [type, props, resizeCanvas])
 
   useEffect(() => {
     resizeCanvas()
   }, [width, height])
-
-  useEffect(() => {
-    if (sigPad.current.isEmpty()) {
-      onChange('')
-    } else {
-      const dataURL = sigPad.current.toDataURL(type)
-      onChange(dataURL)
-    }
-  }, [type])
 
   return (
     <div
