@@ -1,5 +1,5 @@
 {
-  "name": "react-signature-pad",
+  "name": "react-sign-pad",
   "version": "0.0.1",
   "main": "lib",
   "types": "lib/index.d.ts",
