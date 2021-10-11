@@ -1,0 +1,23 @@
+{
+  "compilerOptions": {
+    "esModuleInterop": true,
+    "moduleResolution": "node",
+    "jsx": "react",
+    "module": "commonjs",
+    "target": "es5",
+    "allowJs": false,
+    "noUnusedLocals": false,
+    "removeComments": true,
+    "resolveJsonModule": true,
+    "skipLibCheck": true,
+    "allowSyntheticDefaultImports": true,
+    "preserveConstEnums": true,
+    "sourceMap": false,
+    "declaration": true,
+    "outDir": "./lib",
+    "experimentalDecorators": true,
+    "downlevelIteration": true
+  },
+  "include": ["./src/**/*.ts", "./src/**/*.tsx"],
+  "exclude": ["./src/__tests__/*", "./esm/*", "./lib/*"]
+}
