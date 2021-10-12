@@ -1,6 +1,6 @@
 {
   "name": "react-sign-pad",
-  "version": "0.0.3",
+  "version": "0.0.7",
   "main": "lib",
   "types": "lib/index.d.ts",
   "engines": {

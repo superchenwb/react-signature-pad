@@ -8,7 +8,7 @@ export interface ILuckysheetProps extends Options {
   width?: number
   height?: number
   type?: string
-  onChange?: (data: any, event: MouseEvent) => void
+  onChange?: (data: any, event: MouseEvent | Touch) => void
 }
 
 const pickDataProps = (props: any = {}) => {
@@ -30,28 +30,34 @@ export const ReactSignaturePad = ({
   onChange,
   ...props
 }: ILuckysheetProps) => {
-  const canvas = useRef<HTMLCanvasElement>()
-  const sigPad = useRef<any>(null)
+  const canvas = useRef<HTMLCanvasElement>(null)
+  const sigPad = useRef<SignaturePad>(null)
   const dataProps = pickDataProps(props)
   const resizeCanvas = useCallback(() => {
     const ratio = Math.max(window.devicePixelRatio || 1, 1)
-    canvas.current.width = canvas.current.offsetWidth * ratio
-    canvas.current.height = canvas.current.offsetHeight * ratio
-    canvas.current.getContext('2d').scale(ratio, ratio)
-    sigPad.current.clear() // otherwise isEmpty() might return incorrect value
-  }, [])
+    if (canvas.current) {
+      canvas.current.width = canvas.current.offsetWidth * ratio
+      canvas.current.height = canvas.current.offsetHeight * ratio
+      canvas.current.getContext('2d').scale(ratio, ratio)
+    }
+
+    sigPad.current?.clear() // otherwise isEmpty() might return incorrect value
+  }, [canvas.current, sigPad.current])
   useEffect(() => {
-    sigPad.current = new SignaturePad(canvas.current, props)
-    if (defaultValue) {
-      sigPad.current.fromDataURL(defaultValue)
+    if (canvas.current) {
+      sigPad.current = new SignaturePad(canvas.current, props)
+      if (defaultValue) {
+        sigPad.current.fromDataURL(defaultValue)
+      }
+      if (onChange) {
+        sigPad.current.onEnd = (event: MouseEvent | Touch) => {
+          onChange(sigPad.current.toDataURL(type), event)
+        }
+      }
+      window.addEventListener('resize', resizeCanvas)
     }
-    sigPad.current.on()
-    if (onChange) {
-      sigPad.current.onEnd((event) => onChange(sigPad.current.toDataURL(type), event))
-    }
-    window.addEventListener('resize', resizeCanvas)
+
     return () => {
-      sigPad.current.off()
       window.removeEventListener('resize', resizeCanvas)
     }
   }, [type, props, resizeCanvas])
@@ -63,7 +69,7 @@ export const ReactSignaturePad = ({
   return (
     <div
       className={className ? `${className} go-signature-pad` : 'go-signature-pad'}
-      style={{ height: '100%', ...style }}
+      style={{ display: 'inline-block', ...style }}
       {...dataProps}
     >
       <canvas ref={canvas} width={width} height={height} />
