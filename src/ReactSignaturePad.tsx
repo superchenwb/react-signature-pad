@@ -50,9 +50,9 @@ export const ReactSignaturePad = ({
         sigPad.current.fromDataURL(defaultValue)
       }
       if (onChange) {
-        sigPad.current.onEnd = (event: MouseEvent | Touch) => {
+        sigPad.current.addEventListener('endStroke', (event: any) => {
           onChange(sigPad.current.toDataURL(type), event)
-        }
+        })
       }
       window.addEventListener('resize', resizeCanvas)
     }

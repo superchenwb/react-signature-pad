@@ -1,6 +1,6 @@
 {
   "name": "react-sign-pad",
-  "version": "0.0.7",
+  "version": "4.0.5",
   "main": "lib",
   "types": "lib/index.d.ts",
   "engines": {
@@ -52,6 +52,6 @@
   "dependencies": {
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
-    "signature_pad": "^3.0.0-beta.4"
+    "signature_pad": "4.0.5"
   }
 }
